@@ -1,2 +1,4 @@
 # DELI-cious
-Java CLI Application for a Deli store front
+Java CLI Application for a deli store front
+
+![UML Diagram](ReadMeImages/diagram.png)
