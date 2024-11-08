@@ -13,6 +13,7 @@ public class UserInterface {
             "sauces", new String[]{"mayo", "mustard", "ketchup", "ranch", "thousand islands", "vinaigrette"},
             "sides", new String[]{"au jus", "sauce"}
     );
+    private static final double CHIP_PRICE = 1.5;
     private static boolean running = true;
     private static boolean runningOrder = true;
 
@@ -54,7 +55,7 @@ public class UserInterface {
         switch (choice) {
             case 1 -> addSandwich();
             case 2 -> addDrink();
-            case 3 -> System.out.println("Not implemented");
+            case 3 -> addChip();
             case 4 -> System.out.println("Not implemented");
             case 0 -> runningOrder = false;
             default -> System.out.println("Invalid Choice");
@@ -163,6 +164,12 @@ public class UserInterface {
         String ice = input("How much ice would you like? (None/Less/Regular/More)");
         Drink drink = new Drink(name, drinkPrices.get(size), size, ice);
         StoreFront.addOrder(drink);
+    }
+
+    public static void addChip() {
+        String name = input("What bag of chips would you like to get?");
+        Chip chip = new Chip(name, CHIP_PRICE);
+        StoreFront.addOrder(chip);
     }
 
     public static String input(String prompt) {
