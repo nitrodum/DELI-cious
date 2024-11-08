@@ -5,16 +5,16 @@ import java.util.Scanner;
 
 public class UserInterface {
     private static final Scanner scanner = new Scanner(System.in);
-    private static boolean running = true;
-    private static boolean runningOrder = true;
-    private static StoreFront store;
-    private static Map<Integer, Double> meatPrices = Map.of(4, 1.0, 8, 2.0, 12, 3.0);
-    private static Map<Integer, Double> cheesePrices = Map.of(4, .75, 8, 1.5, 12, 2.25);
-    private static Map<String, String[]> regularToppings = Map.of(
+    private static final Map<Integer, Double> meatPrices = Map.of(4, 1.0, 8, 2.0, 12, 3.0);
+    private static final Map<Integer, Double> cheesePrices = Map.of(4, .75, 8, 1.5, 12, 2.25);
+    private static final Map<String, Double> drinkPrices = Map.of("small", 2.0, "medium", 2.5, "large", 3.0);
+    private static final Map<String, String[]> regularToppings = Map.of(
             "veggies", new String[]{"lettuce", "peppers", "onions", "tomatoes", "jalapenos", "cucumbers", "pickles", "guacamole", "mushrooms"},
             "sauces", new String[]{"mayo", "mustard", "ketchup", "ranch", "thousand islands", "vinaigrette"},
             "sides", new String[]{"au jus", "sauce"}
     );
+    private static boolean running = true;
+    private static boolean runningOrder = true;
 
     public static void run() {
         while (running) {
@@ -53,7 +53,7 @@ public class UserInterface {
 
         switch (choice) {
             case 1 -> addSandwich();
-            case 2 -> System.out.println("Not implemented");
+            case 2 -> addDrink();
             case 3 -> System.out.println("Not implemented");
             case 4 -> System.out.println("Not implemented");
             case 0 -> runningOrder = false;
@@ -86,6 +86,7 @@ public class UserInterface {
         addRegularToppings(sandwich, "sauces", regularToppings.get("sauces"));
         addRegularToppings(sandwich, "sides", regularToppings.get("sides"));
 
+        StoreFront.addOrder(sandwich);
 
     }
 
@@ -154,6 +155,14 @@ public class UserInterface {
             }
             sandwich.addTopping(regularTopping);
         }
+    }
+
+    public static void addDrink() {
+        String name = input("What drink would you like to get?");
+        String size = input("What size would you like? (Small/Medium/Large)");
+        String ice = input("How much ice would you like? (None/Less/Regular/More)");
+        Drink drink = new Drink(name, drinkPrices.get(size), size, ice);
+        StoreFront.addOrder(drink);
     }
 
     public static String input(String prompt) {
