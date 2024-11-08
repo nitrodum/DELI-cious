@@ -34,6 +34,9 @@ public class UserInterface {
         int choice = scanner.nextInt();
         scanner.nextLine();
 
+        runningOrder = true;
+        StoreFront.clearOrder();
+
         switch (choice) {
             case 1 -> { while (runningOrder) { orderScreen();} }
             case 0 -> running = false;
@@ -201,7 +204,7 @@ public class UserInterface {
         if (ans.trim().equalsIgnoreCase("Confirm")) {
             ReceiptFileManager.saveReceipt(receipt.toString());
         } else {
-            StoreFront.clearOrder();
+            runningOrder = false;
         }
     }
 

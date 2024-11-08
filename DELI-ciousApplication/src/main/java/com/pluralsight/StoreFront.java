@@ -15,9 +15,7 @@ public class StoreFront {
     }
 
     public static void clearOrder() {
-        for (Orderable o : orders) {
-            orders.remove(o);
-        }
+        orders.clear();
     }
 
 }
