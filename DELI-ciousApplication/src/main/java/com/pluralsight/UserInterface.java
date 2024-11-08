@@ -56,7 +56,7 @@ public class UserInterface {
             case 1 -> addSandwich();
             case 2 -> addDrink();
             case 3 -> addChip();
-            case 4 -> System.out.println("Not implemented");
+            case 4 -> checkout();
             case 0 -> runningOrder = false;
             default -> System.out.println("Invalid Choice");
         }
@@ -86,6 +86,12 @@ public class UserInterface {
         addRegularToppings(sandwich, "veggies", regularToppings.get("veggies"));
         addRegularToppings(sandwich, "sauces", regularToppings.get("sauces"));
         addRegularToppings(sandwich, "sides", regularToppings.get("sides"));
+
+        ans = input("Would you like the sandwich toasted? (y/n)");
+
+        if (ans.trim().equalsIgnoreCase("y")) {
+            sandwich.setToasted(true);
+        }
 
         StoreFront.addOrder(sandwich);
 
@@ -137,7 +143,9 @@ public class UserInterface {
 
         if (ans.trim().equalsIgnoreCase("all")) {
             choosenToppings = regularToppings;
-        } else if (!ans.isBlank()) {
+        } else if (ans.trim().equalsIgnoreCase("none")) {
+            choosenToppings = null;
+        } else {
             choosenToppings = ans.trim().split(",");
         }
 
@@ -170,6 +178,22 @@ public class UserInterface {
         String name = input("What bag of chips would you like to get?");
         Chip chip = new Chip(name, CHIP_PRICE);
         StoreFront.addOrder(chip);
+    }
+
+    public static void checkout() {
+        double total = 0;
+        for (Orderable o : StoreFront.getOrders()) {
+            total += o.getPrice();
+            if (o instanceof Sandwich s) {
+                System.out.format(s + "\nPrice: $%.2f\n", s.getPrice());
+            } else if (o instanceof Drink d) {
+                System.out.format(d + "\nPrice: $%.2f\n", d.getPrice());
+            } else if (o instanceof Chip c) {
+                System.out.format(c + "\nPrice: $%.2f\n", c.getPrice());
+            }
+        }
+        System.out.format("Total: $%.2f\n", total);
+        System.out.println("Would you like to purchase this order? (Confirm/Cancel)");
     }
 
     public static String input(String prompt) {
