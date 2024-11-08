@@ -14,4 +14,10 @@ public class StoreFront {
         return orders;
     }
 
+    public static void clearOrder() {
+        for (Orderable o : orders) {
+            orders.remove(o);
+        }
+    }
+
 }

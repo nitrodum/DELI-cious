@@ -1,5 +1,6 @@
 package com.pluralsight;
 
+import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -168,7 +169,7 @@ public class UserInterface {
 
     public static void addDrink() {
         String name = input("What drink would you like to get?");
-        String size = input("What size would you like? (Small/Medium/Large)");
+        String size = input("What size would you like? (Small/Medium/Large)").toLowerCase();
         String ice = input("How much ice would you like? (None/Less/Regular/More)");
         Drink drink = new Drink(name, drinkPrices.get(size), size, ice);
         StoreFront.addOrder(drink);
@@ -182,18 +183,26 @@ public class UserInterface {
 
     public static void checkout() {
         double total = 0;
+        DecimalFormat df = new DecimalFormat(".00");
+        StringBuilder receipt = new StringBuilder();
+        String item;
         for (Orderable o : StoreFront.getOrders()) {
             total += o.getPrice();
-            if (o instanceof Sandwich s) {
-                System.out.format(s + "\nPrice: $%.2f\n", s.getPrice());
-            } else if (o instanceof Drink d) {
-                System.out.format(d + "\nPrice: $%.2f\n", d.getPrice());
-            } else if (o instanceof Chip c) {
-                System.out.format(c + "\nPrice: $%.2f\n", c.getPrice());
-            }
+            item = o + "\nPrice: $" + df.format(o.getPrice()) + "\n";
+            receipt.append(item);
         }
-        System.out.format("Total: $%.2f\n", total);
+        item = "Total: $" + df.format(total);
+        receipt.append(item);
+        System.out.println(receipt);
+
         System.out.println("Would you like to purchase this order? (Confirm/Cancel)");
+        String ans = scanner.nextLine();
+
+        if (ans.trim().equalsIgnoreCase("Confirm")) {
+            ReceiptFileManager.saveReceipt(receipt.toString());
+        } else {
+            StoreFront.clearOrder();
+        }
     }
 
     public static String input(String prompt) {
