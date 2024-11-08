@@ -4,17 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Sandwich implements Orderable {
-    private String size;
-    private String bread;
+    private final int size;
+    private final String bread;
     private final List<Topping> toppings = new ArrayList<>();
     private boolean toasted;
+
+    public Sandwich(int size, String bread) {
+        this.size = size;
+        this.bread = bread;
+    }
 
     @Override
     public double getPrice() {
         return 0;
     }
 
-    public String getSize() {
+    public int getSize() {
         return size;
     }
 
@@ -36,7 +41,15 @@ public class Sandwich implements Orderable {
         return copy;
     }
 
+    public void addTopping(Topping t) {
+        toppings.add(t);
+    }
+
     public boolean isToasted() {
         return toasted;
+    }
+
+    public void setToasted(boolean toasted) {
+        this.toasted = toasted;
     }
 }
