@@ -10,4 +10,8 @@ public class StoreFront {
         orders.add(o);
     }
 
+    public static List<Orderable> getOrders() {
+        return orders;
+    }
+
 }

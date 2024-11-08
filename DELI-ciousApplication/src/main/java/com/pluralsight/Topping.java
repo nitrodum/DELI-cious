@@ -17,4 +17,9 @@ public abstract class Topping {
         return extra;
     }
 
+    @Override
+    public String toString() {
+        String isExtra = this.extra ? "Extra " : "";
+        return isExtra + this.name;
+    }
 }

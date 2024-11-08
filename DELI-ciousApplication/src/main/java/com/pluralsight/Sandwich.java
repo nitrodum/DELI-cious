@@ -16,7 +16,21 @@ public class Sandwich implements Orderable {
 
     @Override
     public double getPrice() {
-        return 0;
+        double price = 0;
+        if (size == 4) {
+            price = 5.5;
+        } else if (size == 8) {
+            price = 7.0;
+        } else {
+            price = 8.5;
+        }
+
+        for (Topping topping : toppings) {
+            if (topping instanceof PremiumTopping p) {
+                price += p.getPrice();
+            }
+        }
+        return price;
     }
 
     public int getSize() {
@@ -51,5 +65,15 @@ public class Sandwich implements Orderable {
 
     public void setToasted(boolean toasted) {
         this.toasted = toasted;
+    }
+
+    @Override
+    public String toString() {
+        String isToasted = toasted ? "Toasted" : "Not Toasted";
+        return "Sandwich:\n" +
+                "Size: " + size + "\"\n" +
+                "Bread: " + bread + '\n' +
+                "Toppings: " + toppings + "\n" +
+                isToasted;
     }
 }
