@@ -26,16 +26,14 @@ public class UserInterface {
     }
 
     private static void homeScreen() {
-        System.out.println("----------------------------------------------------------------------------------------------------\n" +
-                "Welcome to DELI-cous!\n" +
-                "1) New Order\n" +
-                "0) Exit");
-
-        int choice = scanner.nextInt();
-        scanner.nextLine();
-
         runningOrder = true;
         StoreFront.clearOrder();
+
+        int choice = inputNumberedChoice("""
+                ----------------------------------------------------------------------------------------------------
+                Welcome to DELI-cous!
+                1) New Order
+                0) Exit""");
 
         switch (choice) {
             case 1 -> { while (runningOrder) { orderScreen();} }
@@ -45,16 +43,14 @@ public class UserInterface {
     }
 
     private static void orderScreen() {
-        System.out.println("----------------------------------------------------------------------------------------------------\n" +
-                "What would you like to add to the order?\n" +
-                "1) Add Sandwich\n" +
-                "2) Add Drink\n" +
-                "3) Add Chip\n" +
-                "4) Checkout\n" +
-                "0) Cancel Order");
-
-        int choice = scanner.nextInt();
-        scanner.nextLine();
+        int choice = inputNumberedChoice("""
+                ----------------------------------------------------------------------------------------------------
+                What would you like to add to the order?
+                1) Add Sandwich
+                2) Add Drink
+                3) Add Chip
+                4) Checkout
+                0) Cancel Order""");
 
         switch (choice) {
             case 1 -> addSandwich();
@@ -68,14 +64,43 @@ public class UserInterface {
     }
 
     public static void addSandwich() {
-        System.out.println("What size would you like the sandwich to be in inches: (4/8/12)");
-        int size = scanner.nextInt();
-        scanner.nextLine();
+        int size = 0;
+        while (size == 0) {
+            int choice = inputNumberedChoice("""
+                What size would you like the sandwich to be in inches?
+                1) 4 inches
+                2) 8 inches
+                3) 12 inches""");
 
-        String bread = input("What type of bread would you like the sandwich to be: (White/Wheat/Rye/Wrap)");
-        String ans = input("Would you like to add meat to the sandwich? (y/n)");
+            switch (choice) {
+                case 1 -> size = 4;
+                case 2 -> size = 8;
+                case 3 -> size = 12;
+                default -> System.out.println("Invalid Choice!");
+            }
+        }
+
+        String bread = "";
+        while (bread.isEmpty()) {
+            int choice = inputNumberedChoice("""
+                    What type of bread would you like the sandwich to be?
+                    1) White
+                    2) Wheat
+                    3) Rye
+                    4) Wrap)""");
+
+            switch (choice) {
+                case 1 -> bread = "White";
+                case 2 -> bread = "Wheat";
+                case 3 -> bread = "Rye";
+                case 4 -> bread = "Wrap";
+                default -> System.out.println("Invalid Choice!");
+            }
+        }
 
         Sandwich sandwich = new Sandwich(size, bread);
+
+        String ans = input("Would you like to add meat to the sandwich? (y/n)");
 
         if (ans.trim().equalsIgnoreCase("y")) {
             addMeat(sandwich);
@@ -102,8 +127,27 @@ public class UserInterface {
     }
 
     public static void addMeat(Sandwich sandwich) {
-        String meatType = input("What meat would you like?\n" +
-                "[Steak/Ham/Salami/Roast Beef/ Chicken/Bacon]");
+        String meatType = "";
+        while (meatType.isEmpty()) {
+            int choice = inputNumberedChoice("""
+                    What meat would you like?
+                    1) Steak
+                    2) Ham
+                    3) Salami
+                    4) Roast Beef
+                    5) Chicken
+                    6) Bacon""");
+
+            switch (choice) {
+                case 1 -> meatType = "Steak";
+                case 2 -> meatType = "Ham";
+                case 3 -> meatType = "Salami";
+                case 4 -> meatType = "Roast Beef";
+                case 5 -> meatType = "Chicken";
+                case 6 -> meatType = "Bacon";
+                default -> System.out.println("Invalid Choice!");
+            }
+        }
         double meatPrice = meatPrices.get(sandwich.getSize());
         Meat meat = null;
         String ans = input("Would you like extra of this meat? (y/n)");
@@ -116,8 +160,23 @@ public class UserInterface {
     }
 
     public static void addCheese(Sandwich sandwich) {
-        String cheeseType = input("What cheese would you like?\n" +
-                "[American/Provolone/Cheddar/Swiss]");
+        String cheeseType = "";
+        while (cheeseType.isEmpty()) {
+            int choice = inputNumberedChoice("""
+                    What cheese would you like?
+                    1) American
+                    2) Provolone
+                    3) Cheddar
+                    4) Swiss""");
+
+            switch (choice) {
+                case 1 -> cheeseType = "American";
+                case 2 -> cheeseType = "Provolone";
+                case 3 -> cheeseType = "Cheddar";
+                case 4 -> cheeseType = "Swiss";
+                default -> System.out.println("Invalid Choice!");
+            }
+        }
         double cheesePrice = cheesePrices.get(sandwich.getSize());
         Cheese cheese = null;
         String ans = input("Would you like extra of this cheese? (y/n)");
@@ -208,9 +267,16 @@ public class UserInterface {
         }
     }
 
-    public static String input(String prompt) {
+    private static String input(String prompt) {
         System.out.println(prompt);
         return scanner.nextLine();
+    }
+
+    private static int inputNumberedChoice(String prompt) {
+        System.out.println(prompt);
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+        return choice;
     }
 
 }
