@@ -59,11 +59,11 @@ public class Sandwich implements Orderable {
         toppings.add(t);
     }
 
-    public void removeTopping(Topping t) {
+    public void removeTopping(String name) {
         Topping toRemove = null;
         for (Topping topping : toppings) {
-            if (t.getName().equalsIgnoreCase(topping.getName())) {
-                toRemove = t;
+            if (topping.getName().equalsIgnoreCase(name)) {
+                toRemove = topping;
                 break;
             }
         }

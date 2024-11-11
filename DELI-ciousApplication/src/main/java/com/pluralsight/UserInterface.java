@@ -19,6 +19,10 @@ public class UserInterface {
     private static final double CHIP_PRICE = 1.5;
     private static boolean running = true;
     private static boolean runningOrder = true;
+    private static boolean runningSandwichMenu = true;
+    private static boolean runningSignatureMenu = true;
+    private static boolean runningViewSignature = true;
+    private static boolean runningEdit = true;
 
     public static void run() {
         while (running) {
@@ -55,7 +59,12 @@ public class UserInterface {
                 0) Cancel Order""");
 
         switch (choice) {
-            case 1 -> addSandwich();
+            case 1 -> {
+                runningSandwichMenu = true;
+                while (runningSandwichMenu) {
+                    sandwichMenu();
+                }
+            }
             case 2 -> addDrink();
             case 3 -> addChip();
             case 4 -> checkout();
@@ -65,7 +74,121 @@ public class UserInterface {
 
     }
 
-    public static void addSandwich() {
+    private static void sandwichMenu() {
+        int choice = inputNumberedChoice("""
+                ----------------------------------------------------------------------------------------------------
+                1) Add Signature Sandwiches
+                2) Create Custom Sandwich
+                """);
+
+        switch (choice) {
+            case 1 -> {
+                runningSignatureMenu = true;
+                while (runningSignatureMenu) {
+                    addSignatureSandwich();
+                }
+            }
+            case 2 -> addSandwich();
+            default -> System.out.println("Invalid Choice");
+        }
+    }
+
+    private static void addSignatureSandwich() {
+        int choice = inputNumberedChoice("""
+                ----------------------------------------------------------------------------------------------------
+                1) BLT
+                2) Philly Cheesesteak
+                """);
+        runningViewSignature = true;
+        switch (choice) {
+            case 1 -> viewSignature(new BLT());
+            case 2 -> viewSignature(new PhillyCheeseSteak());
+            default -> {
+                System.out.println("Invalid Input");
+                addSignatureSandwich();
+            }
+        }
+    }
+
+    private static void viewSignature(SignatureSandwich sandwich) {
+        while (runningViewSignature) {
+            int choice = inputNumberedChoice("----------------------------------------------------------------------------------------------------\n" +
+                    sandwich +
+                    """
+                            \n
+                            1) Add to Order
+                            2) Edit Order
+                            3) Return
+                            """);
+
+            switch (choice) {
+                case 1 -> {
+                    StoreFront.addOrder(sandwich);
+                    runningSignatureMenu = false;
+                    runningViewSignature = false;
+                    runningSandwichMenu = false;
+                }
+                case 2 -> {
+                    runningEdit = true;
+                    while (runningEdit) {
+                        editMenu(sandwich);
+                    }
+                }
+                case 3 -> runningViewSignature = false;
+                default -> System.out.println("Invalid Input");
+            }
+        }
+    }
+
+    private static void editMenu(SignatureSandwich sandwich) {
+        int choice = inputNumberedChoice("""
+                1) Add topping
+                2) Remove topping
+                3) Return
+                """);
+
+        switch (choice) {
+            case 1 -> addTopping(sandwich);
+            case 2 -> removeTopping(sandwich);
+            case 3 -> runningEdit = false;
+            default -> System.out.println("Invalid Input");
+        }
+    }
+
+    private static void addTopping(SignatureSandwich sandwich) {
+        int choice = inputNumberedChoice("""
+                Choose the type of topping you would like to add:
+                1) Regular Topping
+                2) Sauce
+                3) Side
+                """);
+
+        String regularToppingsType;
+        switch (choice) {
+            case 1 -> regularToppingsType = "veggies";
+            case 2 -> regularToppingsType = "sauces";
+            case 3 -> regularToppingsType = "sides";
+            default -> regularToppingsType = null;
+        }
+
+        addRegularToppings(sandwich, regularToppingsType, regularToppings.get(regularToppingsType));
+    }
+
+    private static void removeTopping(SignatureSandwich sandwich) {
+        List<String> choices = new ArrayList<>();
+        for (Topping t : sandwich.getToppings()) {
+            choices.add(t.getName());
+        }
+        String prompt = "Enter the topping you would like to remove:\n" +
+                choices;
+        String ans = input(prompt);
+
+        if (choices.contains(ans.trim().toLowerCase())) {
+            sandwich.removeTopping(ans);
+        }
+    }
+
+    private static void addSandwich() {
         int size = 0;
         while (size == 0) {
             int choice = inputNumberedChoice("""
@@ -125,6 +248,7 @@ public class UserInterface {
         }
 
         StoreFront.addOrder(sandwich);
+        runningSandwichMenu = false;
 
     }
 
@@ -190,10 +314,10 @@ public class UserInterface {
         sandwich.addTopping(cheese);
     }
 
-    public static void addRegularToppings(Sandwich sandwich, String regularToppingsType, List<String> regularToppings) {
+    public static void addRegularToppings(Sandwich sandwich, String regularToppingsType, List<String> regularToppingsList) {
         StringBuilder choices = new StringBuilder();
 
-        for (String choice : regularToppings) {
+        for (String choice : regularToppingsList) {
             choices.append(choice);
             choices.append(",");
         }
@@ -219,9 +343,9 @@ public class UserInterface {
 
         for (String topping : choosenToppings) {
             topping = topping.trim().toLowerCase();
-            if (!regularToppings.contains(topping)) {
+            if (!regularToppingsList.contains(topping)) {
                 System.out.println("Invalid topping chosen");
-                addRegularToppings(sandwich, regularToppingsType, regularToppings);
+                addRegularToppings(sandwich, regularToppingsType, regularToppingsList);
             }
             prompt = "Would you like extra " + topping + "(y/n)";
             ans = input(prompt);
