@@ -1,6 +1,8 @@
 package com.pluralsight;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -9,10 +11,10 @@ public class UserInterface {
     private static final Map<Integer, Double> meatPrices = Map.of(4, 1.0, 8, 2.0, 12, 3.0);
     private static final Map<Integer, Double> cheesePrices = Map.of(4, .75, 8, 1.5, 12, 2.25);
     private static final Map<String, Double> drinkPrices = Map.of("small", 2.0, "medium", 2.5, "large", 3.0);
-    private static final Map<String, String[]> regularToppings = Map.of(
-            "veggies", new String[]{"lettuce", "peppers", "onions", "tomatoes", "jalapenos", "cucumbers", "pickles", "guacamole", "mushrooms"},
-            "sauces", new String[]{"mayo", "mustard", "ketchup", "ranch", "thousand islands", "vinaigrette"},
-            "sides", new String[]{"au jus", "sauce"}
+    private static final Map<String, List<String>> regularToppings = Map.of(
+            "veggies", List.of("lettuce", "peppers", "onions", "tomatoes", "jalapenos", "cucumbers", "pickles", "guacamole", "mushrooms"),
+            "sauces", List.of("mayo", "mustard", "ketchup", "ranch", "thousand islands", "vinaigrette"),
+            "sides", List.of("au jus", "sauce")
     );
     private static final double CHIP_PRICE = 1.5;
     private static boolean running = true;
@@ -188,7 +190,7 @@ public class UserInterface {
         sandwich.addTopping(cheese);
     }
 
-    public static void addRegularToppings(Sandwich sandwich, String regularToppingsType, String[] regularToppings) {
+    public static void addRegularToppings(Sandwich sandwich, String regularToppingsType, List<String> regularToppings) {
         StringBuilder choices = new StringBuilder();
 
         for (String choice : regularToppings) {
@@ -205,7 +207,6 @@ public class UserInterface {
         String[] choosenToppings = null;
 
         if (ans.trim().equalsIgnoreCase("all")) {
-            choosenToppings = regularToppings;
         } else if (ans.trim().equalsIgnoreCase("none")) {
             choosenToppings = null;
         } else {
@@ -217,6 +218,11 @@ public class UserInterface {
         }
 
         for (String topping : choosenToppings) {
+            topping = topping.trim().toLowerCase();
+            if (!regularToppings.contains(topping)) {
+                System.out.println("Invalid topping chosen");
+                addRegularToppings(sandwich, regularToppingsType, regularToppings);
+            }
             prompt = "Would you like extra " + topping + "(y/n)";
             ans = input(prompt);
             RegularTopping regularTopping = null;
