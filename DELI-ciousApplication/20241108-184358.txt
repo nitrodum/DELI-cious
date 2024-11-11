@@ -1,0 +1,15 @@
+Sandwich:
+Size: 4"
+Bread: Wheat
+Toppings: [Extra Steak, Provolone, Lettuce, Extra peppers, onions, mayo]
+Toasted
+Price: $7.75
+Drink: 
+Coke
+Size: small
+Ice: Less
+Price: $2.00
+Chip: 
+Sun Chips
+Price: $1.50
+Total: $11.25

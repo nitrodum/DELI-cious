@@ -59,6 +59,17 @@ public class Sandwich implements Orderable {
         toppings.add(t);
     }
 
+    public void removeTopping(String name) {
+        Topping toRemove = null;
+        for (Topping topping : toppings) {
+            if (topping.getName().equalsIgnoreCase(name)) {
+                toRemove = topping;
+                break;
+            }
+        }
+        toppings.remove(toRemove);
+    }
+
     public boolean isToasted() {
         return toasted;
     }
