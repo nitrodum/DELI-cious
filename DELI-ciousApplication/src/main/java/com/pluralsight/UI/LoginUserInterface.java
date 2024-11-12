@@ -3,14 +3,8 @@ package com.pluralsight.UI;
 import com.pluralsight.User;
 import com.pluralsight.filemanger.UserFileManager;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 public class LoginUserInterface extends UserInterface {
+    public static boolean runningLoginScreen = true;
 
     public static User runLogin() {
         int choice = inputNumberedChoice("""
@@ -33,29 +27,37 @@ public class LoginUserInterface extends UserInterface {
     }
 
     private static User userLoginScreen() {
-        int choice = inputNumberedChoice("""
-                ----------------------------------------------------------------------------------------------------
-                Login Screen
-                1) Log In
-                2) Sign Up
-                """);
+        UserFileManager.loadUserData();
+        User user = null;
+        while (runningLoginScreen) {
+            int choice = inputNumberedChoice("""
+                    ----------------------------------------------------------------------------------------------------
+                    Login Screen
+                    1) Log In
+                    2) Sign Up
+                    """);
 
-        switch (choice) {
-            case 1 -> {
-                return logIn();
+            switch (choice) {
+                case 1 -> {
+                    user = logIn();
+                }
+                case 2 -> {
+                    user = signUp();
+                }
+                default -> System.out.println("Invalid Input");
             }
-            case 2 -> {
-                return signUp();
-            }
-            default -> System.out.println("Invalid Input");
         }
-        return null;
+        return user;
     }
 
     private static User logIn() {
         String username = input("Enter your username");
         String password = input("Enter your password");
-        return UserFileManager.validateUser(username, password);
+        User user = UserFileManager.validateUser(username, password);
+        if (user != null) {
+            runningLoginScreen = false;
+        }
+        return user;
     }
 
     private static User signUp() {
@@ -64,6 +66,7 @@ public class LoginUserInterface extends UserInterface {
         //Need to add user to user list
         User user = new User(username, password);
         UserFileManager.addNewUser(user);
+        runningLoginScreen = false;
         return user;
     }
 

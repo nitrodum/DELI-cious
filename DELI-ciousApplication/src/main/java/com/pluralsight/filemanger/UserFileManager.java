@@ -8,42 +8,59 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserFileManager {
+    private static List<User> users = new ArrayList<>();
+
     public static void addNewUser(User user) {
         String hashedPassword = hashPassword(user.getPassword());
-        try {
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("user_data.txt"));
-            bufferedWriter.write(user.getUsername() + "|" + hashedPassword);
-            bufferedWriter.close();
-        } catch (Exception e) {
-            System.out.println("Error Writing to File");
-        }
+        user.setPassword(hashedPassword);
+        users.add(user);
     }
 
-    public static User validateUser(String username, String password) {
-        String hash = null;
+    public static void loadUserData() {
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader("user_data.txt"));
             String input;
             while ((input = bufferedReader.readLine()) != null) {
                 String[] data = input.split("\\|");
-                if (username.equals(data[0])) {
-                    hash = data[1];
-                }
+                User user = new User(data[0], data[1]);
+                users.add(user);
             }
             bufferedReader.close();
         } catch (Exception e) {
             System.out.println("Error Reading File");
         }
+    }
 
-        if (hash != null && hash.equals(hashPassword(password))) {
-            System.out.println("Successfully logged in!");
-            //Implement loading in user
-            return new User(username, password);
-        } else {
-            System.out.println("Incorrect Credentials!");
+    public static void saveUserData() {
+        try {
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("user_data.txt"));
+            for (User u : users) {
+                bufferedWriter.write(u.getUsername() + "|" + u.getPassword());
+                bufferedWriter.newLine();
+            }
+            bufferedWriter.close();
+        } catch (Exception e) {
+            System.out.println("Error Writing File");
         }
+    }
+
+    public static User validateUser(String username, String password) {
+        String hash = null;
+
+        for (User u : users) {
+            if (u.getUsername().equals(username)) {
+                hash = u.getPassword();
+                if (hash.equals(hashPassword(password))) {
+                    return u;
+                }
+            }
+        }
+
+        System.out.println("Incorrect Credentials!");
         return null;
     }
 

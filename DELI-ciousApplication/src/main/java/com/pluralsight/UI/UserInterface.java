@@ -397,9 +397,9 @@ public class UserInterface {
 
         if (ans.trim().equalsIgnoreCase("Confirm")) {
             ReceiptFileManager.saveReceipt(receipt.toString());
-        } else {
-            runningOrder = false;
         }
+
+        runningOrder = false;
     }
 
     protected static String input(String prompt) {
