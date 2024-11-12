@@ -1,6 +1,14 @@
 package com.pluralsight.UI;
 
 import com.pluralsight.User;
+import com.pluralsight.filemanger.UserFileManager;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class LoginUserInterface extends UserInterface {
 
@@ -47,14 +55,16 @@ public class LoginUserInterface extends UserInterface {
     private static User logIn() {
         String username = input("Enter your username");
         String password = input("Enter your password");
-        //Need to update with fetched data from user list
-        return new User(username, password);
+        return UserFileManager.validateUser(username, password);
     }
 
     private static User signUp() {
         String username = input("Enter a username");
         String password = input("Enter a password");
         //Need to add user to user list
-        return new User(username, password);
+        User user = new User(username, password);
+        UserFileManager.addNewUser(user);
+        return user;
     }
+
 }

@@ -1,8 +1,7 @@
-package com.pluralsight;
+package com.pluralsight.filemanger;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
