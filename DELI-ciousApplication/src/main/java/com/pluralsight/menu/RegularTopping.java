@@ -1,4 +1,4 @@
-package com.pluralsight;
+package com.pluralsight.menu;
 
 public class RegularTopping extends Topping {
 

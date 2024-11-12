@@ -1,4 +1,4 @@
-package com.pluralsight;
+package com.pluralsight.menu;
 
 import java.util.Map;
 

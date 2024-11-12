@@ -1,4 +1,7 @@
-package com.pluralsight;
+package com.pluralsight.UI;
+
+import com.pluralsight.*;
+import com.pluralsight.menu.*;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -23,8 +26,10 @@ public class UserInterface {
     private static boolean runningSignatureMenu = true;
     private static boolean runningViewSignature = true;
     private static boolean runningEdit = true;
+    private static User user;
 
-    public static void run() {
+    public static void run(User u) {
+        user = u;
         while (running) {
             homeScreen();
         }
@@ -37,7 +42,6 @@ public class UserInterface {
 
         int choice = inputNumberedChoice("""
                 ----------------------------------------------------------------------------------------------------
-                Welcome to DELI-cous!
                 1) New Order
                 0) Exit""");
 
@@ -397,12 +401,12 @@ public class UserInterface {
         }
     }
 
-    private static String input(String prompt) {
+    protected static String input(String prompt) {
         System.out.println(prompt);
         return scanner.nextLine();
     }
 
-    private static int inputNumberedChoice(String prompt) {
+    protected static int inputNumberedChoice(String prompt) {
         System.out.println(prompt);
         int choice = scanner.nextInt();
         scanner.nextLine();
