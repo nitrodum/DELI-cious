@@ -57,8 +57,10 @@ public class UserInterface {
                 default -> System.out.println("Invalid Choice");
             }
         } else {
+            System.out.println("----------------------------------------------------------------------------------------------------\n" +
+                    "Hello " + user.getUsername() + "!\n" +
+                    "Your current reward points: " + user.getRewardPoints());
             choice = inputNumberedChoice("""
-                    ----------------------------------------------------------------------------------------------------
                     1) New Order
                     2) View Previous Orders
                     0) Exit""");
@@ -432,6 +434,8 @@ public class UserInterface {
             String receiptFileName = ReceiptFileManager.getFileName();
             ReceiptFileManager.saveReceipt(receiptFileName, receipt.toString());
             user.addReceipt(receiptFileName);
+            int rewards = user.getRewardPoints() + (int)(total);
+            user.setRewardPoints(rewards);
         }
 
         runningOrder = false;

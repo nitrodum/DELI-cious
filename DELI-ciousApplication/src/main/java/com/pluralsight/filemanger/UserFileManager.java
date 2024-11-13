@@ -28,11 +28,11 @@ public class UserFileManager {
                 String[] data = input.split("\\|");
                 User user;
 
-                if (data.length < 3) {
+                if (data.length < 4) {
                     user = new User(data[0], data[1]);
                 } else {
-                    String[] receipts = data[2].split(",");
-                    user = new User(data[0], data[1], receipts);
+                    String[] receipts = data[3].split(",");
+                    user = new User(data[0], data[1], Integer.parseInt(data[2]), receipts);
                 }
                 users.add(user);
             }
@@ -49,7 +49,7 @@ public class UserFileManager {
             for (User u : users) {
                 String receipts = String.join(",", u.getReceipts());
 
-                bufferedWriter.write(u.getUsername() + "|" + u.getPassword() + "|" + receipts);
+                bufferedWriter.write(u.getUsername() + "|" + u.getPassword() + "|" + u.getRewardPoints() + "|" + receipts);
                 bufferedWriter.newLine();
             }
             bufferedWriter.close();

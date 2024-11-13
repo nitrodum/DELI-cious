@@ -8,6 +8,7 @@ public class User {
     private String username;
     private String password;
     private List<String> receipts = new ArrayList<>();
+    private int rewardPoints;
 
     public User(String username) {
         this.username = username;
@@ -16,12 +17,14 @@ public class User {
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+        this.rewardPoints = 0;
     }
 
-    public User(String username, String password, String[] receipts) {
+    public User(String username, String password, int rewardPoints, String[] receipts) {
         this.username = username;
         this.password = password;
         Collections.addAll(this.receipts, receipts);
+        this.rewardPoints = rewardPoints;
     }
 
     public String getUsername() {
@@ -50,5 +53,13 @@ public class User {
 
     public void addReceipt(String receipt) {
         this.receipts.add(receipt);
+    }
+
+    public int getRewardPoints() {
+        return rewardPoints;
+    }
+
+    public void setRewardPoints(int rewardPoints) {
+        this.rewardPoints = rewardPoints;
     }
 }
