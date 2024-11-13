@@ -26,22 +26,30 @@ public class UserFileManager {
             String input;
             while ((input = bufferedReader.readLine()) != null) {
                 String[] data = input.split("\\|");
-                String[] receipts = input.split(",");
+                User user;
 
-                User user = new User(data[0], data[1], receipts);
+                if (data.length < 3) {
+                    user = new User(data[0], data[1]);
+                } else {
+                    String[] receipts = data[2].split(",");
+                    user = new User(data[0], data[1], receipts);
+                }
                 users.add(user);
             }
             bufferedReader.close();
         } catch (Exception e) {
             System.out.println("Error Reading File");
+            e.printStackTrace();
         }
     }
 
     public static void saveUserData() {
         try {
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("user_data.txt"));
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("user_data.txt", false));
             for (User u : users) {
-                bufferedWriter.write(u.getUsername() + "|" + u.getPassword());
+                String receipts = String.join(",", u.getReceipts());
+
+                bufferedWriter.write(u.getUsername() + "|" + u.getPassword() + "|" + receipts);
                 bufferedWriter.newLine();
             }
             bufferedWriter.close();

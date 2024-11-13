@@ -7,15 +7,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class ReceiptFileManager {
-    public static void saveReceipt(String receipt) {
-        LocalDate today = LocalDate.now();
-        LocalTime now = LocalTime.now();
-
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HHmmss");
-
-        String fileName = "Receipts/" + today.format(dateFormatter) + "-" + now.format(timeFormatter) + ".txt";
-
+    public static void saveReceipt(String fileName, String receipt) {
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileName));
             bufferedWriter.write(receipt);
@@ -24,5 +16,15 @@ public class ReceiptFileManager {
             System.out.println("Error Writing to File");
             e.printStackTrace();
         }
+    }
+
+    public static String getFileName() {
+        LocalDate today = LocalDate.now();
+        LocalTime now = LocalTime.now();
+
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HHmmss");
+
+        return "Receipts/" + today.format(dateFormatter) + "-" + now.format(timeFormatter) + ".txt";
     }
 }

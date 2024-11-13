@@ -1,9 +1,13 @@
 package com.pluralsight;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class User {
     private String username;
     private String password;
-    private String[] receipts;
+    private List<String> receipts = new ArrayList<>();
 
     public User(String username) {
         this.username = username;
@@ -17,7 +21,7 @@ public class User {
     public User(String username, String password, String[] receipts) {
         this.username = username;
         this.password = password;
-        this.receipts = receipts;
+        Collections.addAll(this.receipts, receipts);
     }
 
     public String getUsername() {
@@ -36,11 +40,15 @@ public class User {
         this.password = password;
     }
 
-    public void setReceipts(String[] receipts) {
+    public void setReceipts(List<String> receipts) {
         this.receipts = receipts;
     }
 
-    public String[] getReceipts() {
+    public List<String> getReceipts() {
         return this.receipts;
+    }
+
+    public void addReceipt(String receipt) {
+        this.receipts.add(receipt);
     }
 }

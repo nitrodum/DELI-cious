@@ -396,7 +396,9 @@ public class UserInterface {
         String ans = scanner.nextLine();
 
         if (ans.trim().equalsIgnoreCase("Confirm")) {
-            ReceiptFileManager.saveReceipt(receipt.toString());
+            String receiptFileName = ReceiptFileManager.getFileName();
+            ReceiptFileManager.saveReceipt(receiptFileName, receipt.toString());
+            user.addReceipt(receiptFileName);
         }
 
         runningOrder = false;
