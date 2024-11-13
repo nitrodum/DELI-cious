@@ -26,7 +26,9 @@ public class UserFileManager {
             String input;
             while ((input = bufferedReader.readLine()) != null) {
                 String[] data = input.split("\\|");
-                User user = new User(data[0], data[1]);
+                String[] receipts = input.split(",");
+
+                User user = new User(data[0], data[1], receipts);
                 users.add(user);
             }
             bufferedReader.close();
