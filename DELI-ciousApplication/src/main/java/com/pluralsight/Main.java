@@ -8,6 +8,8 @@ public class Main {
     public static void main(String[] args) {
         User user = LoginUserInterface.runLogin();
         UserInterface.run(user);
-        UserFileManager.saveUserData();
+        if (!user.getUsername().equalsIgnoreCase("guest")) {
+            UserFileManager.saveUserData();
+        }
     }
 }

@@ -40,16 +40,49 @@ public class UserInterface {
     private static void homeScreen() {
         runningOrder = true;
         StoreFront.clearOrder();
+        int choice;
+        if (user.getUsername().equalsIgnoreCase("guest")) {
+             choice = inputNumberedChoice("""
+                    ----------------------------------------------------------------------------------------------------
+                    1) New Order
+                    0) Exit""");
 
-        int choice = inputNumberedChoice("""
-                ----------------------------------------------------------------------------------------------------
-                1) New Order
-                0) Exit""");
+            switch (choice) {
+                case 1 -> {
+                    while (runningOrder) {
+                        orderScreen();
+                    }
+                }
+                case 0 -> running = false;
+                default -> System.out.println("Invalid Choice");
+            }
+        } else {
+            choice = inputNumberedChoice("""
+                    ----------------------------------------------------------------------------------------------------
+                    1) New Order
+                    2) View Previous Orders
+                    0) Exit""");
 
-        switch (choice) {
-            case 1 -> { while (runningOrder) { orderScreen();} }
-            case 0 -> running = false;
-            default -> System.out.println("Invalid Choice");
+            switch (choice) {
+                case 1 -> {
+                    while (runningOrder) {
+                        orderScreen();
+                    }
+                }
+                case 2 -> displayPreviousOrders();
+                case 0 -> running = false;
+                default -> System.out.println("Invalid Choice");
+            }
+        }
+    }
+
+    private static void displayPreviousOrders() {
+        if (user.getReceipts().isEmpty()) {
+            System.out.println("No previous orders to display");
+        } else {
+            for (String receipt : user.getReceipts()) {
+                System.out.println(ReceiptFileManager.loadReceipt(receipt));
+            }
         }
     }
 
