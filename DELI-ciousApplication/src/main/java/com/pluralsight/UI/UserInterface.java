@@ -1,4 +1,8 @@
-package com.pluralsight;
+package com.pluralsight.UI;
+
+import com.pluralsight.*;
+import com.pluralsight.filemanger.ReceiptFileManager;
+import com.pluralsight.menu.*;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -23,8 +27,10 @@ public class UserInterface {
     private static boolean runningSignatureMenu = true;
     private static boolean runningViewSignature = true;
     private static boolean runningEdit = true;
+    private static User user;
 
-    public static void run() {
+    public static void run(User u) {
+        user = u;
         while (running) {
             homeScreen();
         }
@@ -34,17 +40,51 @@ public class UserInterface {
     private static void homeScreen() {
         runningOrder = true;
         StoreFront.clearOrder();
+        int choice;
+        if (user.getUsername().equalsIgnoreCase("guest")) {
+             choice = inputNumberedChoice("""
+                    ----------------------------------------------------------------------------------------------------
+                    1) New Order
+                    0) Exit""");
 
-        int choice = inputNumberedChoice("""
-                ----------------------------------------------------------------------------------------------------
-                Welcome to DELI-cous!
-                1) New Order
-                0) Exit""");
+            switch (choice) {
+                case 1 -> {
+                    while (runningOrder) {
+                        orderScreen();
+                    }
+                }
+                case 0 -> running = false;
+                default -> System.out.println("Invalid Choice");
+            }
+        } else {
+            System.out.println("----------------------------------------------------------------------------------------------------\n" +
+                    "Hello " + user.getUsername() + "!\n" +
+                    "Your current reward points: " + user.getRewardPoints());
+            choice = inputNumberedChoice("""
+                    1) New Order
+                    2) View Previous Orders
+                    0) Exit""");
 
-        switch (choice) {
-            case 1 -> { while (runningOrder) { orderScreen();} }
-            case 0 -> running = false;
-            default -> System.out.println("Invalid Choice");
+            switch (choice) {
+                case 1 -> {
+                    while (runningOrder) {
+                        orderScreen();
+                    }
+                }
+                case 2 -> displayPreviousOrders();
+                case 0 -> running = false;
+                default -> System.out.println("Invalid Choice");
+            }
+        }
+    }
+
+    private static void displayPreviousOrders() {
+        if (user.getReceipts().isEmpty()) {
+            System.out.println("No previous orders to display");
+        } else {
+            for (String receipt : user.getReceipts()) {
+                System.out.println(ReceiptFileManager.loadReceipt(receipt));
+            }
         }
     }
 
@@ -391,18 +431,22 @@ public class UserInterface {
         String ans = scanner.nextLine();
 
         if (ans.trim().equalsIgnoreCase("Confirm")) {
-            ReceiptFileManager.saveReceipt(receipt.toString());
-        } else {
-            runningOrder = false;
+            String receiptFileName = ReceiptFileManager.getFileName();
+            ReceiptFileManager.saveReceipt(receiptFileName, receipt.toString());
+            user.addReceipt(receiptFileName);
+            int rewards = user.getRewardPoints() + (int)(total);
+            user.setRewardPoints(rewards);
         }
+
+        runningOrder = false;
     }
 
-    private static String input(String prompt) {
+    protected static String input(String prompt) {
         System.out.println(prompt);
         return scanner.nextLine();
     }
 
-    private static int inputNumberedChoice(String prompt) {
+    protected static int inputNumberedChoice(String prompt) {
         System.out.println(prompt);
         int choice = scanner.nextInt();
         scanner.nextLine();

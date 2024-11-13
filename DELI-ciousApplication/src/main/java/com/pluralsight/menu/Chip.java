@@ -1,4 +1,4 @@
-package com.pluralsight;
+package com.pluralsight.menu;
 
 public class Chip extends ExtraProduct {
     public Chip(String name, double price) {

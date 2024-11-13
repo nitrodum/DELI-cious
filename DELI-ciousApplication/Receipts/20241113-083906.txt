@@ -1,0 +1,15 @@
+Philly Cheesesteak Sandwich:
+Size: 8"
+Bread: White
+Toppings: [Steak, American, peppers, mayo]
+Toasted
+Price: $10.50
+Drink: 
+Coke Zero
+Size: medium
+Ice: less
+Price: $2.50
+Chip: 
+Lays
+Price: $1.50
+Total: $14.50
