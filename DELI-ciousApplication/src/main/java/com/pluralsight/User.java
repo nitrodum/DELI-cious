@@ -1,5 +1,7 @@
 package com.pluralsight;
 
+import com.pluralsight.menu.Orderable;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,6 +11,7 @@ public class User {
     private String password;
     private List<String> receipts = new ArrayList<>();
     private int rewardPoints;
+    private List<Orderable> savedOrders;
 
     public User(String username) {
         this.username = username;
@@ -61,5 +64,13 @@ public class User {
 
     public void setRewardPoints(int rewardPoints) {
         this.rewardPoints = rewardPoints;
+    }
+
+    public List<Orderable> getSavedOrders() {
+        return savedOrders;
+    }
+
+    public void setSavedOrders(List<Orderable> savedOrders) {
+        this.savedOrders = savedOrders;
     }
 }

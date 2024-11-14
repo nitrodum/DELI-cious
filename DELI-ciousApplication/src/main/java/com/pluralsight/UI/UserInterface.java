@@ -42,6 +42,7 @@ public class UserInterface {
 
     private static void homeScreen() {
         int choice;
+        runningOrder = true;
         StringBuilder prompt = new StringBuilder();
         prompt.append("----------------------------------------------------------------------------------------------------");
         if (!isGuest) {
@@ -49,6 +50,7 @@ public class UserInterface {
         }
         prompt.append("\n1) New Order\n");
         if (!isGuest) {
+            prompt.append("2) Resume Order\n");
             prompt.append("2) View Previous Orders\n");
             prompt.append("3) View Rewards Page\n");
         }
@@ -56,22 +58,27 @@ public class UserInterface {
         choice = inputNumberedChoice(prompt.toString());
 
         switch (choice) {
+            case 0:
+                running = false;
+                break;
             case 1:
-                runningOrder = true;
                 StoreFront.clearOrder();
                 while (runningOrder) {
                     orderScreen();
                 }
                 break;
-            case 0:
-                running = false;
-                break;
             case 2:
+                StoreFront.setOrders(user.getSavedOrders());
+                while (runningOrder) {
+                    orderScreen();
+                }
+                break;
+            case 3:
                 if (!isGuest) {
                     displayPreviousOrders();
                     break;
                 }
-            case 3:
+            case 4:
                 if (!isGuest) {
                     rewardScreen();
                     break;
@@ -509,20 +516,32 @@ public class UserInterface {
         receipt.append(item);
         System.out.println(receipt);
 
-        System.out.println("Would you like to purchase this order? (Confirm/Cancel)");
-        String ans = scanner.nextLine();
+        int choice = inputNumberedChoice("""
+        Would you like to purchase this order?
+        1) Confirm Purchase
+        2) Save for Later
+        3) Cancel""");
 
-        if (ans.trim().equalsIgnoreCase("Confirm")) {
-            String receiptFileName = ReceiptFileManager.getFileName();
-            ReceiptFileManager.saveReceipt(receiptFileName, receipt.toString());
-            user.addReceipt(receiptFileName);
-            int rewards = user.getRewardPoints() + (int) (total);
-            user.setRewardPoints(rewards);
-            if (!isGuest) {
-                UserFileManager.saveUserData();
-            }
+        switch (choice) {
+            case 1 :
+                String receiptFileName = ReceiptFileManager.getFileName();
+                ReceiptFileManager.saveReceipt(receiptFileName, receipt.toString());
+                user.addReceipt(receiptFileName);
+                int rewards = user.getRewardPoints() + (int) (total);
+                user.setRewardPoints(rewards);
+                StoreFront.clearOrder();
+            case 2:
+                user.setSavedOrders(StoreFront.getOrders());
+                if (!isGuest) {
+                    UserFileManager.saveUserData();
+                }
+            case 3:
+                System.out.println("Exiting Checkout!");
+                break;
+            default:
+                System.out.println("Invalid Input");
+                break;
         }
-
         runningOrder = false;
     }
 
