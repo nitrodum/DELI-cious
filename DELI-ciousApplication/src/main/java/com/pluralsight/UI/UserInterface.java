@@ -91,24 +91,29 @@ public class UserInterface {
     }
 
     private static void rewardScreen() {
-        StringBuilder rewardBar = new StringBuilder();
+        String rewardBar = "";
         int maxBar = 100;
-        int bar = Math.min(user.getRewardPoints(), maxBar);
-        rewardBar.append("*".repeat(bar));
-        rewardBar.append("-".repeat(maxBar-bar));
-        System.out.println("""
-        ----------------------------------------------------------------------------------------------------
-        Reward Screen
-        """ + rewardBar);
-        int choice = inputNumberedChoice("""
-                1) Claim Free Sandwich (100 Points)
-                2) Claim Free Drink (20 Points)
-                3) Claim Free Chips (10 Points)""");
-        switch (choice) {
-            case 1 -> sandwichReward();
-            case 2 -> drinkReward();
-            case 3 -> chipReward();
-            default -> System.out.println("Invalid Input");
+        boolean runningRewardScreen = true;
+        while (runningRewardScreen) {
+            int bar = Math.min(user.getRewardPoints(), maxBar);
+            rewardBar = "*".repeat(bar) + "-".repeat(maxBar - bar);
+            System.out.println("""
+                    ----------------------------------------------------------------------------------------------------
+                    Reward Screen
+                    """ + rewardBar +
+                    "\n0        10        20        30        40        50        60        70        80        90        100\n");
+            int choice = inputNumberedChoice("""
+                    1) Claim Free Sandwich (100 Points)
+                    2) Claim Free Drink (20 Points)
+                    3) Claim Free Chips (10 Points)
+                    4) Exit Reward Screen""");
+            switch (choice) {
+                case 1 -> sandwichReward();
+                case 2 -> drinkReward();
+                case 3 -> chipReward();
+                case 4 -> runningRewardScreen = false;
+                default -> System.out.println("Invalid Input");
+            }
         }
     }
 
