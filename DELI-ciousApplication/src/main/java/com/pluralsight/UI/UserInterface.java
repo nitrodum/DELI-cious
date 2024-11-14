@@ -40,41 +40,37 @@ public class UserInterface {
     private static void homeScreen() {
         runningOrder = true;
         StoreFront.clearOrder();
+        boolean isGuest = user.getUsername().equalsIgnoreCase("guest");
         int choice;
-        if (user.getUsername().equalsIgnoreCase("guest")) {
-             choice = inputNumberedChoice("""
-                    ----------------------------------------------------------------------------------------------------
-                    1) New Order
-                    0) Exit""");
+        StringBuilder prompt = new StringBuilder();
+       prompt.append("----------------------------------------------------------------------------------------------------");
+       if (!isGuest) {
+           prompt.append("\nHello ").append(user.getUsername()).append("!\n").append("Your current reward points: ").append(user.getRewardPoints());
+       }
+       prompt.append("\n1) New Order\n");
+        if (!isGuest) {
+            prompt.append("2) View Previous Orders\n");
+        }
+        prompt.append("0) Exit");
+            choice = inputNumberedChoice(prompt.toString());
 
-            switch (choice) {
-                case 1 -> {
-                    while (runningOrder) {
-                        orderScreen();
-                    }
-                }
-                case 0 -> running = false;
-                default -> System.out.println("Invalid Choice");
+        switch (choice) {
+            case 1:
+                while (runningOrder) {
+                    orderScreen();
             }
-        } else {
-            System.out.println("----------------------------------------------------------------------------------------------------\n" +
-                    "Hello " + user.getUsername() + "!\n" +
-                    "Your current reward points: " + user.getRewardPoints());
-            choice = inputNumberedChoice("""
-                    1) New Order
-                    2) View Previous Orders
-                    0) Exit""");
+                break;
+            case 0:
+                running = false;
+                break;
+            case 2:
+                if(!isGuest) {
+                    displayPreviousOrders();
+                    break;
+                }
+            default:
+                System.out.println("Invalid Choice");
 
-            switch (choice) {
-                case 1 -> {
-                    while (runningOrder) {
-                        orderScreen();
-                    }
-                }
-                case 2 -> displayPreviousOrders();
-                case 0 -> running = false;
-                default -> System.out.println("Invalid Choice");
-            }
         }
     }
 
@@ -232,10 +228,10 @@ public class UserInterface {
         int size = 0;
         while (size == 0) {
             int choice = inputNumberedChoice("""
-                What size would you like the sandwich to be in inches?
-                1) 4 inches
-                2) 8 inches
-                3) 12 inches""");
+                    What size would you like the sandwich to be in inches?
+                    1) 4 inches
+                    2) 8 inches
+                    3) 12 inches""");
 
             switch (choice) {
                 case 1 -> size = 4;
@@ -361,7 +357,7 @@ public class UserInterface {
             choices.append(choice);
             choices.append(",");
         }
-        choices.deleteCharAt(choices.length()-1);
+        choices.deleteCharAt(choices.length() - 1);
 
         String prompt = "Would you like to add " + regularToppingsType + " to this sandwich?\n" +
                 "Enter the toppings you would like separated by commas, or enter (all) for all or (none) for none\n" +
@@ -434,7 +430,7 @@ public class UserInterface {
             String receiptFileName = ReceiptFileManager.getFileName();
             ReceiptFileManager.saveReceipt(receiptFileName, receipt.toString());
             user.addReceipt(receiptFileName);
-            int rewards = user.getRewardPoints() + (int)(total);
+            int rewards = user.getRewardPoints() + (int) (total);
             user.setRewardPoints(rewards);
         }
 
