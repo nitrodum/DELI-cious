@@ -43,29 +43,35 @@ public class UserInterface {
         boolean isGuest = user.getUsername().equalsIgnoreCase("guest");
         int choice;
         StringBuilder prompt = new StringBuilder();
-       prompt.append("----------------------------------------------------------------------------------------------------");
-       if (!isGuest) {
-           prompt.append("\nHello ").append(user.getUsername()).append("!\n").append("Your current reward points: ").append(user.getRewardPoints());
-       }
-       prompt.append("\n1) New Order\n");
+        prompt.append("----------------------------------------------------------------------------------------------------");
+        if (!isGuest) {
+            prompt.append("\nHello ").append(user.getUsername()).append("!\n").append("Your current reward points: ").append(user.getRewardPoints());
+        }
+        prompt.append("\n1) New Order\n");
         if (!isGuest) {
             prompt.append("2) View Previous Orders\n");
+            prompt.append("3) View Rewards Page\n");
         }
         prompt.append("0) Exit");
-            choice = inputNumberedChoice(prompt.toString());
+        choice = inputNumberedChoice(prompt.toString());
 
         switch (choice) {
             case 1:
                 while (runningOrder) {
                     orderScreen();
-            }
+                }
                 break;
             case 0:
                 running = false;
                 break;
             case 2:
-                if(!isGuest) {
+                if (!isGuest) {
                     displayPreviousOrders();
+                    break;
+                }
+            case 3:
+                if (!isGuest) {
+                    rewardScreen();
                     break;
                 }
             default:
@@ -82,6 +88,40 @@ public class UserInterface {
                 System.out.println(ReceiptFileManager.loadReceipt(receipt));
             }
         }
+    }
+
+    private static void rewardScreen() {
+        StringBuilder rewardBar = new StringBuilder();
+        int maxBar = 100;
+        int bar = Math.min(user.getRewardPoints(), maxBar);
+        rewardBar.append("*".repeat(bar));
+        rewardBar.append("-".repeat(maxBar-bar));
+        System.out.println("""
+        ----------------------------------------------------------------------------------------------------
+        Reward Screen
+        """ + rewardBar);
+        int choice = inputNumberedChoice("""
+                1) Claim Free Sandwich (100 Points)
+                2) Claim Free Drink (20 Points)
+                3) Claim Free Chips (10 Points)""");
+        switch (choice) {
+            case 1 -> sandwichReward();
+            case 2 -> drinkReward();
+            case 3 -> chipReward();
+            default -> System.out.println("Invalid Input");
+        }
+    }
+
+    private static void sandwichReward() {
+
+    }
+
+    private static void drinkReward() {
+
+    }
+
+    private static void chipReward() {
+
     }
 
     private static void orderScreen() {
@@ -225,39 +265,9 @@ public class UserInterface {
     }
 
     private static void addSandwich() {
-        int size = 0;
-        while (size == 0) {
-            int choice = inputNumberedChoice("""
-                    What size would you like the sandwich to be in inches?
-                    1) 4 inches
-                    2) 8 inches
-                    3) 12 inches""");
+        int size = chooseSandwichSize();
 
-            switch (choice) {
-                case 1 -> size = 4;
-                case 2 -> size = 8;
-                case 3 -> size = 12;
-                default -> System.out.println("Invalid Choice!");
-            }
-        }
-
-        String bread = "";
-        while (bread.isEmpty()) {
-            int choice = inputNumberedChoice("""
-                    What type of bread would you like the sandwich to be?
-                    1) White
-                    2) Wheat
-                    3) Rye
-                    4) Wrap)""");
-
-            switch (choice) {
-                case 1 -> bread = "White";
-                case 2 -> bread = "Wheat";
-                case 3 -> bread = "Rye";
-                case 4 -> bread = "Wrap";
-                default -> System.out.println("Invalid Choice!");
-            }
-        }
+        String bread = chooseBread();
 
         Sandwich sandwich = new Sandwich(size, bread);
 
@@ -288,7 +298,47 @@ public class UserInterface {
 
     }
 
-    public static void addMeat(Sandwich sandwich) {
+    private static int chooseSandwichSize() {
+        int size = 0;
+        while (size == 0) {
+            int choice = inputNumberedChoice("""
+                    What size would you like the sandwich to be in inches?
+                    1) 4 inches
+                    2) 8 inches
+                    3) 12 inches""");
+
+            switch (choice) {
+                case 1 -> size = 4;
+                case 2 -> size = 8;
+                case 3 -> size = 12;
+                default -> System.out.println("Invalid Choice!");
+            }
+        }
+        return size;
+    }
+
+    private static String chooseBread() {
+        String bread = "";
+        while (bread.isEmpty()) {
+            int choice = inputNumberedChoice("""
+                    What type of bread would you like the sandwich to be?
+                    1) White
+                    2) Wheat
+                    3) Rye
+                    4) Wrap)""");
+
+            switch (choice) {
+                case 1 -> bread = "White";
+                case 2 -> bread = "Wheat";
+                case 3 -> bread = "Rye";
+                case 4 -> bread = "Wrap";
+                default -> System.out.println("Invalid Choice!");
+            }
+        }
+        return bread;
+    }
+
+    private static void addMeat(Sandwich sandwich) {
         String meatType = "";
         while (meatType.isEmpty()) {
             int choice = inputNumberedChoice("""
