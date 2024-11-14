@@ -8,14 +8,19 @@ public class Sandwich implements Orderable {
     private final String bread;
     private final List<Topping> toppings = new ArrayList<>();
     private boolean toasted;
+    private boolean reward;
 
     public Sandwich(int size, String bread) {
         this.size = size;
         this.bread = bread;
+        this.reward = false;
     }
 
     @Override
     public double getPrice() {
+        if (reward) {
+            return 0;
+        }
         double price = 0;
         if (size == 4) {
             price = 5.5;
@@ -77,6 +82,9 @@ public class Sandwich implements Orderable {
     public void setToasted(boolean toasted) {
         this.toasted = toasted;
     }
+
+
+    public void setReward(boolean reward) { this.reward = reward;}
 
     @Override
     public String toString() {

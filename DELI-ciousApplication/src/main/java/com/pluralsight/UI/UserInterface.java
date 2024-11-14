@@ -2,6 +2,7 @@ package com.pluralsight.UI;
 
 import com.pluralsight.*;
 import com.pluralsight.filemanger.ReceiptFileManager;
+import com.pluralsight.filemanger.UserFileManager;
 import com.pluralsight.menu.*;
 
 import java.text.DecimalFormat;
@@ -14,7 +15,7 @@ public class UserInterface {
     private static final Scanner scanner = new Scanner(System.in);
     private static final Map<Integer, Double> meatPrices = Map.of(4, 1.0, 8, 2.0, 12, 3.0);
     private static final Map<Integer, Double> cheesePrices = Map.of(4, .75, 8, 1.5, 12, 2.25);
-    private static final Map<String, Double> drinkPrices = Map.of("small", 2.0, "medium", 2.5, "large", 3.0);
+    private static final Map<String, Double> drinkPrices = Map.of("reward", 0.0, "small", 2.0, "medium", 2.5, "large", 3.0);
     private static final Map<String, List<String>> regularToppings = Map.of(
             "veggies", List.of("lettuce", "peppers", "onions", "tomatoes", "jalapenos", "cucumbers", "pickles", "guacamole", "mushrooms"),
             "sauces", List.of("mayo", "mustard", "ketchup", "ranch", "thousand islands", "vinaigrette"),
@@ -28,9 +29,11 @@ public class UserInterface {
     private static boolean runningViewSignature = true;
     private static boolean runningEdit = true;
     private static User user;
+    private static boolean isGuest;
 
     public static void run(User u) {
         user = u;
+        isGuest = user.getUsername().equalsIgnoreCase("guest");
         while (running) {
             homeScreen();
         }
@@ -38,9 +41,6 @@ public class UserInterface {
     }
 
     private static void homeScreen() {
-        runningOrder = true;
-        StoreFront.clearOrder();
-        boolean isGuest = user.getUsername().equalsIgnoreCase("guest");
         int choice;
         StringBuilder prompt = new StringBuilder();
         prompt.append("----------------------------------------------------------------------------------------------------");
@@ -57,6 +57,8 @@ public class UserInterface {
 
         switch (choice) {
             case 1:
+                runningOrder = true;
+                StoreFront.clearOrder();
                 while (runningOrder) {
                     orderScreen();
                 }
@@ -118,15 +120,30 @@ public class UserInterface {
     }
 
     private static void sandwichReward() {
-
+        if (user.getRewardPoints() >= 100) {
+            addSandwich(true);
+            user.setRewardPoints(user.getRewardPoints()-100);
+        } else {
+            System.out.println("Not enough reward points!");
+        }
     }
 
     private static void drinkReward() {
-
+        if (user.getRewardPoints() >= 20) {
+            addDrink(true);
+            user.setRewardPoints(user.getRewardPoints()-20);
+        } else {
+            System.out.println("Not enough reward points!");
+        }
     }
 
     private static void chipReward() {
-
+        if (user.getRewardPoints() >= 10) {
+            addChip(true);
+            user.setRewardPoints(user.getRewardPoints()-10);
+        } else {
+            System.out.println("Not enough reward points!");
+        }
     }
 
     private static void orderScreen() {
@@ -146,8 +163,8 @@ public class UserInterface {
                     sandwichMenu();
                 }
             }
-            case 2 -> addDrink();
-            case 3 -> addChip();
+            case 2 -> addDrink(false);
+            case 3 -> addChip(false);
             case 4 -> checkout();
             case 0 -> runningOrder = false;
             default -> System.out.println("Invalid Choice");
@@ -169,7 +186,7 @@ public class UserInterface {
                     addSignatureSandwich();
                 }
             }
-            case 2 -> addSandwich();
+            case 2 -> addSandwich(false);
             default -> System.out.println("Invalid Choice");
         }
     }
@@ -269,7 +286,7 @@ public class UserInterface {
         }
     }
 
-    private static void addSandwich() {
+    private static void addSandwich(boolean reward) {
         int size = chooseSandwichSize();
 
         String bread = chooseBread();
@@ -296,6 +313,10 @@ public class UserInterface {
 
         if (ans.trim().equalsIgnoreCase("y")) {
             sandwich.setToasted(true);
+        }
+
+        if (reward) {
+
         }
 
         StoreFront.addOrder(sandwich);
@@ -450,17 +471,27 @@ public class UserInterface {
         }
     }
 
-    public static void addDrink() {
+    public static void addDrink(boolean reward) {
         String name = input("What drink would you like to get?");
         String size = input("What size would you like? (Small/Medium/Large)").toLowerCase();
         String ice = input("How much ice would you like? (None/Less/Regular/More)");
-        Drink drink = new Drink(name, drinkPrices.get(size), size, ice);
+        Drink drink;
+        if (reward) {
+            drink = new Drink(name, drinkPrices.get("reward"), size, ice);
+        } else {
+            drink = new Drink(name, drinkPrices.get(size), size, ice);
+        }
         StoreFront.addOrder(drink);
     }
 
-    public static void addChip() {
+    public static void addChip(boolean reward) {
         String name = input("What bag of chips would you like to get?");
-        Chip chip = new Chip(name, CHIP_PRICE);
+        Chip chip;
+        if (reward) {
+            chip = new Chip(name, 0.0);
+        } else {
+            chip = new Chip(name, CHIP_PRICE);
+        }
         StoreFront.addOrder(chip);
     }
 
@@ -487,6 +518,9 @@ public class UserInterface {
             user.addReceipt(receiptFileName);
             int rewards = user.getRewardPoints() + (int) (total);
             user.setRewardPoints(rewards);
+            if (!isGuest) {
+                UserFileManager.saveUserData();
+            }
         }
 
         runningOrder = false;
