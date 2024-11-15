@@ -515,7 +515,7 @@ public class UserInterface {
                 .append("\nTotal: $").append(df.format(total)).append("\n\n")
                 .append("============================\n")
                 .append("  Earned Reward Points: ").append((int) total).append("\n")
-                .append("  Total Reward Points: ").append(user.getRewardPoints())
+                .append("  Total Reward Points: ").append(user.getRewardPoints() + (int) total)
                 .append("\n============================\n");
         System.out.println(receipt);
 
