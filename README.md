@@ -122,4 +122,10 @@ The user can then choose to claim a reward. For 100 points they can claim a free
 
 When the user confirms a purchase, their order is saved as a .txt file, with the file name being the time of purchase.
 
+## Code Snippet
+![Code Snippet](ReadMeImages/Hash.png)
+
+This code snippet demonstrates how the program securely stores user passwords. When a user enters their password, it is
+encrypted using a SHA-256 hash. The resulting hashed byte array is then converted to a hexadecimal string, ensuring that 
+only the hashed version is stored. This approach prevents storing plaintext passwords, enhancing the security of user data.
 [Back to Top](#deli-cious)
