@@ -1,0 +1,22 @@
+============================
+          DELI-cious
+      Thanks for Ordering!
+============================
+
+Order Summary:
+----------------------------
+Drink: 
+CZ
+Size: large
+Ice: less
+Price: $3.00
+
+Total: $3.00
+----------------------------
+
+Total: $3.00
+
+============================
+  Earned Reward Points: 3
+  Total Reward Points: 13
+============================

@@ -139,15 +139,16 @@ public class UserInterface {
     }
 
     private static void orderScreen() {
+        String rewardPrompt = (isGuest) ? "" : "5) Reward Screen\n";
         int choice = inputNumberedChoice("""
                 ----------------------------------------------------------------------------------------------------
                 What would you like to add to the order?
                 1) Add Sandwich
                 2) Add Drink
                 3) Add Chip
-                4) View Rewards Page
-                5) Checkout
-                0) Cancel Order""");
+                4) Checkout
+                """ + rewardPrompt +
+                "0) Cancel Order");
 
         switch (choice) {
             case 1 -> {
@@ -158,8 +159,12 @@ public class UserInterface {
             }
             case 2 -> addDrink(false);
             case 3 -> addChip(false);
-            case 4 -> rewardScreen();
-            case 5 -> checkout();
+            case 4 -> checkout();
+            case 5 -> {
+                if (!isGuest) {
+                    rewardScreen();
+                }
+            }
             case 0 -> runningOrder = false;
             default -> System.out.println("Invalid Choice");
         }
@@ -514,11 +519,13 @@ public class UserInterface {
                 .append("\n============================\n");
         System.out.println(receipt);
 
+        String savePrompt = (isGuest) ? "\n2)" : "\n2) Save For Later\n3)";
+
         int choice = inputNumberedChoice("""
                 Would you like to purchase this order?
-                1) Confirm Purchase
-                2) Save for Later
-                3) Cancel""");
+                1) Confirm Purchase"""
+                + savePrompt +
+                " Cancel");
 
         switch (choice) {
             case 1:
@@ -552,14 +559,15 @@ public class UserInterface {
             if (o.getPrice() == 0) {
                 if (o instanceof Sandwich s) {
                     s.setReward(false);
-                    addRewards(s.getPrice());
+                    addRewards(100);
                 } else if (o instanceof Drink d) {
-                    addRewards(StoreFront.drinkPrices.get(d.getSize()));
+                    addRewards(20);
                 } else {
-                    addRewards(StoreFront.CHIP_PRICE);
+                    addRewards(10);
                 }
             }
         }
+        StoreFront.clearOrder();
     }
 
     protected static String input(String prompt) {

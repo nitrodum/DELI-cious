@@ -69,16 +69,13 @@ public class UserFileManager {
 
     public static List<Orderable> loadSavedOrders(String orderString) {
         List<Orderable> savedOrders = new ArrayList<>();
-        System.out.println(orderString);
         String[] lines = orderString.split("-");
 
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i].trim();
-            System.out.println("Processing line: " + line); // Debug line
 
             if (line.contains("Sandwich")) {
                 String sizeLine = lines[++i].trim();
-                System.out.println("Size line: " + sizeLine); // Debug line
                 String[] sizeData = sizeLine.split(": ")[1].split("\"");
                 int size = Integer.parseInt(sizeData[0]);
 
