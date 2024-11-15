@@ -94,7 +94,7 @@ public class UserInterface {
             System.out.println("""
                     ----------------------------------------------------------------------------------------------------
                     Reward Screen
-                    """ + rewardBar +
+                    Current Reward Points: """ + user.getRewardPoints() + "\n" + rewardBar +
                     "\n0        10        20        30        40        50        60        70        80        90        100\n");
             int choice = inputNumberedChoice("""
                     1) Claim Free Sandwich (100 Points)
