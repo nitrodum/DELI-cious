@@ -24,6 +24,7 @@
    - [Checkout](#checkout)
    - [Reward Screen](#reward-screen)
    - [Receipt](#receipt)
+6. [Code Snippet](#code-snippet)
 ## Overview
 This project is a Java based application that allows users to place orders, manage their account, track their order history
 and earn rewards points that they can redeem. The project includes features such as user authentication, storing user data,
