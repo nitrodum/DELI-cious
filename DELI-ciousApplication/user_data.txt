@@ -1,1 +1,2 @@
-Nima|7e7c621a3034cc7c58740cf23af6d2288c8ae3bfcda09456feac99c7e05cbb1e|38|Receipts/20241114-173341.txt,Receipts/20241114-174512.txt,Receipts/20241114-205008.txt,Receipts/20241114-215937.txt|
+Nima|7e7c621a3034cc7c58740cf23af6d2288c8ae3bfcda09456feac99c7e05cbb1e|37|Receipts/20241114-173341.txt,Receipts/20241114-174512.txt,Receipts/20241114-205008.txt,Receipts/20241114-215937.txt,Receipts/20241115-142806.txt|BLT Sandwich:-Size: 8"-Bread: White-Toppings: bacon, cheddar, lettuce, tomato, ranch -Toasted-Price: $10.5-
+Example|03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4|10|Receipts/20241115-143045.txt|

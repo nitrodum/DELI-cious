@@ -1,0 +1,23 @@
+============================
+          DELI-cious
+      Thanks for Ordering!
+============================
+
+Order Summary:
+----------------------------
+Philly Cheesesteak Sandwich:
+Size: 8"
+Bread: White
+Toppings: Steak, American, peppers, mayo, Extra onions 
+Toasted
+Price: $10.50
+
+Total: $10.50
+----------------------------
+
+Total: $10.50
+
+============================
+  Earned Reward Points: 10
+  Total Reward Points: 10
+============================

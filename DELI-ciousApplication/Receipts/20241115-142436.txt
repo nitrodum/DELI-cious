@@ -1,0 +1,23 @@
+============================
+          DELI-cious
+      Thanks for Ordering!
+============================
+
+Order Summary:
+----------------------------
+Sandwich:
+Size: 8"
+Bread: White
+Toppings: Extra Ham, Provolone, Extra lettuce, peppers, Extra onions, mayo 
+Toasted
+Price: $11.50
+
+Total: $11.50
+----------------------------
+
+Total: $11.50
+
+============================
+  Earned Reward Points: 11
+  Total Reward Points: 11
+============================

@@ -11,7 +11,7 @@ public class User {
     private String password;
     private List<String> receipts = new ArrayList<>();
     private int rewardPoints;
-    private List<Orderable> savedOrders;
+    private List<Orderable> savedOrders = new ArrayList<>();
 
     public User(String username) {
         this.username = username;

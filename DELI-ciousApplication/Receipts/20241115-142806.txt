@@ -1,0 +1,33 @@
+============================
+          DELI-cious
+      Thanks for Ordering!
+============================
+
+Order Summary:
+----------------------------
+Sandwich:
+Size: 8"
+Bread: White
+Toppings: Steak 
+Toasted
+Price: $7.00
+
+Drink: 
+Coke
+Size: small
+Ice: less
+Price: $2.00
+
+Chip: 
+Lays
+Price: $.00
+
+Total: $9.00
+----------------------------
+
+Total: $9.00
+
+============================
+  Earned Reward Points: 9
+  Total Reward Points: 37
+============================

@@ -503,10 +503,12 @@ public class UserInterface {
                 .append("Order Summary:\n")
                 .append("----------------------------\n");
 
-        for (Orderable o : StoreFront.getOrders()) {
-            total += o.getPrice();
-            item = o + "\nPrice: $" + df.format(o.getPrice()) + "\n";
-            receipt.append(item).append("\n");
+        if (StoreFront.getOrders() != null) {
+            for (Orderable o : StoreFront.getOrders()) {
+                total += o.getPrice();
+                item = o + "\nPrice: $" + df.format(o.getPrice()) + "\n";
+                receipt.append(item).append("\n");
+            }
         }
         item = "Total: $" + df.format(total);
         receipt.append(item);
@@ -555,6 +557,10 @@ public class UserInterface {
     }
 
     private static void clearOrder() {
+        StoreFront.setOrders(user.getSavedOrders());
+        if (StoreFront.getOrders() == null) {
+            return;
+        }
         for (Orderable o : StoreFront.getOrders()) {
             if (o.getPrice() == 0) {
                 if (o instanceof Sandwich s) {
