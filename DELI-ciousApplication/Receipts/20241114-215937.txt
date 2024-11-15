@@ -1,0 +1,39 @@
+============================
+          DELI-cious
+      Thanks for Ordering!
+============================
+
+Order Summary:
+----------------------------
+Sandwich:
+Size: 12"
+Bread: White
+Toppings: Extra Chicken, Cheddar, Extra lettuce, peppers, Extra onions, jalapenos, mushrooms, mayo 
+Toasted
+Price: $15.25
+
+Drink: 
+Mtn Dew
+Size: large
+Ice: less
+Price: $3.00
+
+Drink: 
+Water
+Size: medium
+Ice: none
+Price: $2.50
+
+Chip: 
+Kettle Chips
+Price: $1.50
+
+Total: $22.25
+----------------------------
+
+Total: $22.25
+
+============================
+  Earned Reward Points: 22
+  Total Reward Points: 16
+============================
