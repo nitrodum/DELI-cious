@@ -8,20 +8,10 @@ import com.pluralsight.menu.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 public class UserInterface {
     private static final Scanner scanner = new Scanner(System.in);
-    private static final Map<Integer, Double> meatPrices = Map.of(4, 1.0, 8, 2.0, 12, 3.0);
-    private static final Map<Integer, Double> cheesePrices = Map.of(4, .75, 8, 1.5, 12, 2.25);
-    private static final Map<String, Double> drinkPrices = Map.of("reward", 0.0, "small", 2.0, "medium", 2.5, "large", 3.0);
-    private static final Map<String, List<String>> regularToppings = Map.of(
-            "veggies", List.of("lettuce", "peppers", "onions", "tomatoes", "jalapenos", "cucumbers", "pickles", "guacamole", "mushrooms"),
-            "sauces", List.of("mayo", "mustard", "ketchup", "ranch", "thousand islands", "vinaigrette"),
-            "sides", List.of("au jus", "sauce")
-    );
-    private static final double CHIP_PRICE = 1.5;
     private static boolean running = true;
     private static boolean runningOrder = true;
     private static boolean runningSandwichMenu = true;
@@ -51,8 +41,7 @@ public class UserInterface {
         prompt.append("\n1) New Order\n");
         if (!isGuest) {
             prompt.append("2) Resume Order\n");
-            prompt.append("2) View Previous Orders\n");
-            prompt.append("3) View Rewards Page\n");
+            prompt.append("3) View Previous Orders\n");
         }
         prompt.append("0) Exit");
         choice = inputNumberedChoice(prompt.toString());
@@ -62,7 +51,7 @@ public class UserInterface {
                 running = false;
                 break;
             case 1:
-                StoreFront.clearOrder();
+                clearOrder();
                 while (runningOrder) {
                     orderScreen();
                 }
@@ -78,14 +67,9 @@ public class UserInterface {
                     displayPreviousOrders();
                     break;
                 }
-            case 4:
-                if (!isGuest) {
-                    rewardScreen();
-                    break;
-                }
             default:
                 System.out.println("Invalid Choice");
-
+                break;
         }
     }
 
@@ -94,13 +78,14 @@ public class UserInterface {
             System.out.println("No previous orders to display");
         } else {
             for (String receipt : user.getReceipts()) {
+                System.out.println("*".repeat(100));
                 System.out.println(ReceiptFileManager.loadReceipt(receipt));
             }
         }
     }
 
     private static void rewardScreen() {
-        String rewardBar = "";
+        String rewardBar;
         int maxBar = 100;
         boolean runningRewardScreen = true;
         while (runningRewardScreen) {
@@ -129,7 +114,7 @@ public class UserInterface {
     private static void sandwichReward() {
         if (user.getRewardPoints() >= 100) {
             addSandwich(true);
-            user.setRewardPoints(user.getRewardPoints()-100);
+            user.setRewardPoints(user.getRewardPoints() - 100);
         } else {
             System.out.println("Not enough reward points!");
         }
@@ -138,7 +123,7 @@ public class UserInterface {
     private static void drinkReward() {
         if (user.getRewardPoints() >= 20) {
             addDrink(true);
-            user.setRewardPoints(user.getRewardPoints()-20);
+            user.setRewardPoints(user.getRewardPoints() - 20);
         } else {
             System.out.println("Not enough reward points!");
         }
@@ -147,7 +132,7 @@ public class UserInterface {
     private static void chipReward() {
         if (user.getRewardPoints() >= 10) {
             addChip(true);
-            user.setRewardPoints(user.getRewardPoints()-10);
+            user.setRewardPoints(user.getRewardPoints() - 10);
         } else {
             System.out.println("Not enough reward points!");
         }
@@ -160,7 +145,8 @@ public class UserInterface {
                 1) Add Sandwich
                 2) Add Drink
                 3) Add Chip
-                4) Checkout
+                4) View Rewards Page
+                5) Checkout
                 0) Cancel Order""");
 
         switch (choice) {
@@ -172,7 +158,8 @@ public class UserInterface {
             }
             case 2 -> addDrink(false);
             case 3 -> addChip(false);
-            case 4 -> checkout();
+            case 4 -> rewardScreen();
+            case 5 -> checkout();
             case 0 -> runningOrder = false;
             default -> System.out.println("Invalid Choice");
         }
@@ -276,7 +263,7 @@ public class UserInterface {
             default -> regularToppingsType = null;
         }
 
-        addRegularToppings(sandwich, regularToppingsType, regularToppings.get(regularToppingsType));
+        addRegularToppings(sandwich, regularToppingsType, StoreFront.regularToppings.get(regularToppingsType));
     }
 
     private static void removeTopping(SignatureSandwich sandwich) {
@@ -312,18 +299,14 @@ public class UserInterface {
             addCheese(sandwich);
         }
 
-        addRegularToppings(sandwich, "veggies", regularToppings.get("veggies"));
-        addRegularToppings(sandwich, "sauces", regularToppings.get("sauces"));
-        addRegularToppings(sandwich, "sides", regularToppings.get("sides"));
+        addRegularToppings(sandwich, "veggies", StoreFront.regularToppings.get("veggies"));
+        addRegularToppings(sandwich, "sauces", StoreFront.regularToppings.get("sauces"));
+        addRegularToppings(sandwich, "sides", StoreFront.regularToppings.get("sides"));
 
         ans = input("Would you like the sandwich toasted? (y/n)");
 
         if (ans.trim().equalsIgnoreCase("y")) {
             sandwich.setToasted(true);
-        }
-
-        if (reward) {
-
         }
 
         StoreFront.addOrder(sandwich);
@@ -393,7 +376,7 @@ public class UserInterface {
                 default -> System.out.println("Invalid Choice!");
             }
         }
-        double meatPrice = meatPrices.get(sandwich.getSize());
+        double meatPrice = StoreFront.meatPrices.get(sandwich.getSize());
         Meat meat = null;
         String ans = input("Would you like extra of this meat? (y/n)");
         if (ans.trim().equalsIgnoreCase("y")) {
@@ -422,7 +405,7 @@ public class UserInterface {
                 default -> System.out.println("Invalid Choice!");
             }
         }
-        double cheesePrice = cheesePrices.get(sandwich.getSize());
+        double cheesePrice = StoreFront.cheesePrices.get(sandwich.getSize());
         Cheese cheese = null;
         String ans = input("Would you like extra of this cheese? (y/n)");
         if (ans.trim().equalsIgnoreCase("y")) {
@@ -484,9 +467,9 @@ public class UserInterface {
         String ice = input("How much ice would you like? (None/Less/Regular/More)");
         Drink drink;
         if (reward) {
-            drink = new Drink(name, drinkPrices.get("reward"), size, ice);
+            drink = new Drink(name, StoreFront.drinkPrices.get("reward"), size, ice);
         } else {
-            drink = new Drink(name, drinkPrices.get(size), size, ice);
+            drink = new Drink(name, StoreFront.drinkPrices.get(size), size, ice);
         }
         StoreFront.addOrder(drink);
     }
@@ -497,7 +480,7 @@ public class UserInterface {
         if (reward) {
             chip = new Chip(name, 0.0);
         } else {
-            chip = new Chip(name, CHIP_PRICE);
+            chip = new Chip(name, StoreFront.CHIP_PRICE);
         }
         StoreFront.addOrder(chip);
     }
@@ -507,28 +490,42 @@ public class UserInterface {
         DecimalFormat df = new DecimalFormat(".00");
         StringBuilder receipt = new StringBuilder();
         String item;
+
+        receipt.append("============================\n")
+                .append("          DELI-cious\n")
+                .append("      Thanks for Ordering!\n")
+                .append("============================\n\n")
+                .append("Order Summary:\n")
+                .append("----------------------------\n");
+
         for (Orderable o : StoreFront.getOrders()) {
             total += o.getPrice();
             item = o + "\nPrice: $" + df.format(o.getPrice()) + "\n";
-            receipt.append(item);
+            receipt.append(item).append("\n");
         }
         item = "Total: $" + df.format(total);
         receipt.append(item);
+
+        receipt.append("\n----------------------------\n")
+                .append("\nTotal: $").append(df.format(total)).append("\n\n")
+                .append("============================\n")
+                .append("  Earned Reward Points: ").append((int) total).append("\n")
+                .append("  Total Reward Points: ").append(user.getRewardPoints())
+                .append("\n============================\n");
         System.out.println(receipt);
 
         int choice = inputNumberedChoice("""
-        Would you like to purchase this order?
-        1) Confirm Purchase
-        2) Save for Later
-        3) Cancel""");
+                Would you like to purchase this order?
+                1) Confirm Purchase
+                2) Save for Later
+                3) Cancel""");
 
         switch (choice) {
-            case 1 :
+            case 1:
                 String receiptFileName = ReceiptFileManager.getFileName();
                 ReceiptFileManager.saveReceipt(receiptFileName, receipt.toString());
                 user.addReceipt(receiptFileName);
-                int rewards = user.getRewardPoints() + (int) (total);
-                user.setRewardPoints(rewards);
+                addRewards(total);
                 StoreFront.clearOrder();
             case 2:
                 user.setSavedOrders(StoreFront.getOrders());
@@ -543,6 +540,26 @@ public class UserInterface {
                 break;
         }
         runningOrder = false;
+    }
+
+    private static void addRewards(double price) {
+        int rewards = user.getRewardPoints() + (int) (price);
+        user.setRewardPoints(rewards);
+    }
+
+    private static void clearOrder() {
+        for (Orderable o : StoreFront.getOrders()) {
+            if (o.getPrice() == 0) {
+                if (o instanceof Sandwich s) {
+                    s.setReward(false);
+                    addRewards(s.getPrice());
+                } else if (o instanceof Drink d) {
+                    addRewards(StoreFront.drinkPrices.get(d.getSize()));
+                } else {
+                    addRewards(StoreFront.CHIP_PRICE);
+                }
+            }
+        }
     }
 
     protected static String input(String prompt) {

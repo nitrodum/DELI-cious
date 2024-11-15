@@ -1,11 +1,13 @@
 package com.pluralsight.menu;
 
+import com.pluralsight.StoreFront;
+
 public class BLT extends SignatureSandwich {
     public BLT() {
         super(8, "White");
         this.name = "BLT";
-        Meat bacon = new Meat("bacon", false, 2.0);
-        Cheese cheddar = new Cheese("cheddar", false, 1.5);
+        Meat bacon = new Meat("bacon", false, StoreFront.meatPrices.get(getSize()));
+        Cheese cheddar = new Cheese("cheddar", false, StoreFront.cheesePrices.get(getSize()));
         addTopping(bacon);
         addTopping(cheddar);
         RegularTopping lettuce = new RegularTopping("lettuce", false);

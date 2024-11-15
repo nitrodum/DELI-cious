@@ -23,11 +23,12 @@ public class User {
         this.rewardPoints = 0;
     }
 
-    public User(String username, String password, int rewardPoints, String[] receipts) {
+    public User(String username, String password, int rewardPoints, String[] receipts, List<Orderable> savedOrders) {
         this.username = username;
         this.password = password;
         Collections.addAll(this.receipts, receipts);
         this.rewardPoints = rewardPoints;
+        this.savedOrders = savedOrders;
     }
 
     public String getUsername() {

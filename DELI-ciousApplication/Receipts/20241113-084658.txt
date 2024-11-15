@@ -1,7 +1,0 @@
-BLT Sandwich:
-Size: 8"
-Bread: White
-Toppings: [bacon, cheddar, lettuce, tomato, mayo]
-Toasted
-Price: $10.50
-Total: $10.50

@@ -1,6 +1,7 @@
 package com.pluralsight.filemanger;
 
 import com.pluralsight.User;
+import com.pluralsight.menu.*;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -28,12 +29,11 @@ public class UserFileManager {
                 String[] data = input.split("\\|");
                 User user;
 
-                if (data.length < 4) {
-                    user = new User(data[0], data[1]);
-                } else {
-                    String[] receipts = data[3].split(",");
-                    user = new User(data[0], data[1], Integer.parseInt(data[2]), receipts);
-                }
+                String[] receipts = (data.length > 3) ? data[3].split(",") : new String[0];
+                List<Orderable> savedOrders = (data.length > 4) ? loadSavedOrders(data[4]) : new ArrayList<>();
+
+                user = new User(data[0], data[1], Integer.parseInt(data[2]), receipts, savedOrders);
+
                 users.add(user);
             }
             bufferedReader.close();
@@ -48,14 +48,89 @@ public class UserFileManager {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("user_data.txt", false));
             for (User u : users) {
                 String receipts = String.join(",", u.getReceipts());
+                String savedOrders = writeSavedOrders(u.getSavedOrders());
 
-                bufferedWriter.write(u.getUsername() + "|" + u.getPassword() + "|" + u.getRewardPoints() + "|" + receipts);
+                bufferedWriter.write(u.getUsername() + "|" + u.getPassword() + "|" + u.getRewardPoints() + "|" + receipts + "|" + savedOrders);
                 bufferedWriter.newLine();
             }
             bufferedWriter.close();
         } catch (Exception e) {
             System.out.println("Error Writing File");
         }
+    }
+
+    public static String writeSavedOrders(List<Orderable> savedOrders) {
+        StringBuilder orders = new StringBuilder();
+        for (Orderable o : savedOrders) {
+            orders.append(o).append("\n").append("Price: $").append(o.getPrice()).append("\n");
+        }
+        return orders.toString().replaceAll("\n", "-");
+    }
+
+    public static List<Orderable> loadSavedOrders(String orderString) {
+        List<Orderable> savedOrders = new ArrayList<>();
+        System.out.println(orderString);
+        String[] lines = orderString.split("-");
+
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i].trim();
+            System.out.println("Processing line: " + line); // Debug line
+
+            if (line.contains("Sandwich")) {
+                String sizeLine = lines[++i].trim();
+                System.out.println("Size line: " + sizeLine); // Debug line
+                String[] sizeData = sizeLine.split(": ")[1].split("\"");
+                int size = Integer.parseInt(sizeData[0]);
+
+                String bread = lines[++i].split(": ")[1];
+
+                Sandwich s = new Sandwich(size, bread);
+
+                String toppingsLine = lines[++i].split(": ")[1];
+                String[] toppingsArray = toppingsLine.split(",");
+
+                for (String topping : toppingsArray) {
+                    boolean extra = false;
+                    String name;
+                    String[] toppingData = topping.trim().split(" ");
+                    if (toppingData[0].equalsIgnoreCase("extra")) {
+                        extra = true;
+                        name = toppingData[1];
+                    } else {
+                        name = toppingData[0];
+                    }
+                    Topping t = new RegularTopping(name, extra);
+                    s.addTopping(t);
+                }
+                String toastedLine = lines[++i];
+                boolean toasted = toastedLine.equalsIgnoreCase("Toasted");
+
+                s.setToasted(toasted);
+
+                double price = Double.parseDouble(lines[++i].split(": ")[1].replace("$", ""));
+
+                if (price == 0) {
+                    s.setReward(true);
+                }
+
+                savedOrders.add(s);
+            } else if (line.startsWith("Drink:")) {
+                String drinkName = lines[++i];
+                String size = lines[++i].split(": ")[1];
+                String ice = lines[++i].split(": ")[1];
+                double price = Double.parseDouble(lines[++i].split(": ")[1].replace("$", ""));
+
+                Drink drink = new Drink(drinkName, price, size, ice);
+                savedOrders.add(drink);
+            } else if (line.startsWith("Chip:")) {
+                String chipName = lines[++i];
+                double price = Double.parseDouble(lines[++i].split(": ")[1].replace("$", ""));
+
+                Chip chip = new Chip(chipName, price);
+                savedOrders.add(chip);
+            }
+        }
+        return savedOrders;
     }
 
     public static User validateUser(String username, String password) {

@@ -1,9 +1,0 @@
-Drink: 
-Coke Zero
-Size: small
-Ice: less
-Price: $2.00
-Chip: 
-Lays
-Price: $1.50
-Total: $3.50

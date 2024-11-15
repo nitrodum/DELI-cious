@@ -89,10 +89,16 @@ public class Sandwich implements Orderable {
     @Override
     public String toString() {
         String isToasted = toasted ? "Toasted" : "Not Toasted";
+        StringBuilder toppingString = new StringBuilder();
+
+        for (Topping t : toppings) {
+            toppingString.append(t).append(", ");
+        }
+        toppingString.replace(toppingString.length()-2, toppingString.length()-1, "");
         return "Sandwich:\n" +
                 "Size: " + size + "\"\n" +
                 "Bread: " + bread + '\n' +
-                "Toppings: " + toppings + "\n" +
+                "Toppings: " + toppingString + "\n" +
                 isToasted;
     }
 }

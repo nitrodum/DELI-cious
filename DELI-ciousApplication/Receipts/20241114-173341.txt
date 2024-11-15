@@ -1,0 +1,26 @@
+============================
+          DELI-cious
+      Thanks for Ordering!
+============================
+
+Order Summary:
+----------------------------
+Drink: 
+Coke
+Size: small
+Ice: less
+Price: $2.00
+
+Chip: 
+Cheetos
+Price: $1.50
+Total: $3.50
+
+----------------------------
+
+Total: $3.50
+
+============================
+  Earned Reward Points: 3
+  Total Reward Points: 0
+============================
