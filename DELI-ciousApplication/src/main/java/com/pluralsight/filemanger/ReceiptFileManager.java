@@ -16,7 +16,7 @@ public class ReceiptFileManager {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
             String input;
             while ((input = bufferedReader.readLine()) != null) {
-                receipt.append(input + "\n");
+                receipt.append(input).append("\n");
             }
             bufferedReader.close();
         } catch (Exception e) {

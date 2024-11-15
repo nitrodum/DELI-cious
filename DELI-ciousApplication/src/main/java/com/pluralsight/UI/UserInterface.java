@@ -292,13 +292,13 @@ public class UserInterface {
 
         Sandwich sandwich = new Sandwich(size, bread);
 
-        String ans = input("Would you like to add meat to the sandwich? (y/n)");
+        String ans = inputYesNo("Would you like to add meat to the sandwich?");
 
         if (ans.trim().equalsIgnoreCase("y")) {
             addMeat(sandwich);
         }
 
-        ans = input("Would you like to add cheese to the sandwich? (y/n)");
+        ans = inputYesNo("Would you like to add cheese to the sandwich?");
 
         if (ans.trim().equalsIgnoreCase("y")) {
             addCheese(sandwich);
@@ -308,7 +308,7 @@ public class UserInterface {
         addRegularToppings(sandwich, "sauces", StoreFront.regularToppings.get("sauces"));
         addRegularToppings(sandwich, "sides", StoreFront.regularToppings.get("sides"));
 
-        ans = input("Would you like the sandwich toasted? (y/n)");
+        ans = inputYesNo("Would you like the sandwich toasted?");
 
         if (ans.trim().equalsIgnoreCase("y")) {
             sandwich.setToasted(true);
@@ -383,7 +383,7 @@ public class UserInterface {
         }
         double meatPrice = StoreFront.meatPrices.get(sandwich.getSize());
         Meat meat = null;
-        String ans = input("Would you like extra of this meat? (y/n)");
+        String ans = inputYesNo("Would you like extra of this meat?");
         if (ans.trim().equalsIgnoreCase("y")) {
             meat = new Meat(meatType, true, meatPrice);
         } else if (ans.trim().equalsIgnoreCase("n")) {
@@ -412,7 +412,7 @@ public class UserInterface {
         }
         double cheesePrice = StoreFront.cheesePrices.get(sandwich.getSize());
         Cheese cheese = null;
-        String ans = input("Would you like extra of this cheese? (y/n)");
+        String ans = inputYesNo("Would you like extra of this cheese?");
         if (ans.trim().equalsIgnoreCase("y")) {
             cheese = new Cheese(cheeseType, true, cheesePrice);
         } else if (ans.trim().equalsIgnoreCase("n")) {
@@ -454,8 +454,8 @@ public class UserInterface {
                 System.out.println("Invalid topping chosen");
                 addRegularToppings(sandwich, regularToppingsType, regularToppingsList);
             }
-            prompt = "Would you like extra " + topping + "(y/n)";
-            ans = input(prompt);
+            prompt = "Would you like extra " + topping;
+            ans = inputYesNo(prompt);
             RegularTopping regularTopping = null;
             if (ans.trim().equalsIgnoreCase("y")) {
                 regularTopping = new RegularTopping(topping, true);
@@ -580,6 +580,16 @@ public class UserInterface {
         int choice = scanner.nextInt();
         scanner.nextLine();
         return choice;
+    }
+
+    public static String inputYesNo(String prompt) {
+        System.out.println(prompt + " (y/n)");
+        String input = scanner.nextLine().trim().toLowerCase();
+        while (!input.equals("y") && !input.equals("n")) {
+            System.out.println("Invalid input. Please enter 'y' or 'n'.");
+            input = scanner.nextLine().trim().toLowerCase();
+        }
+        return input;
     }
 
 }
