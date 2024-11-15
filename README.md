@@ -1,5 +1,29 @@
 # DELI-cious
-### Java CLI Application for a deli store front
+### Java CLI Application for a Deli Store Front
+## Table of Contents
+1. [Overview](#overview)
+2. [Features](#features)
+  - [User Authentication](#user-authentication)
+  - [Order Management](#order-management)
+  - [Receipt Saving](#receipt-saving)
+  - [Reward Points](#reward-points)
+  - [User Data Saving](#user-data-saving)
+3. [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Running the Application](#running-the-application)
+4. [Code Structure](#code-structure)
+  - [com.pluralsight.menu](#compluralsightmenu)
+  - [com.pluralsight](#compluralsight)
+  - [com.pluralsight.UI](#compluralsightui)
+  - [com.pluralsight.filemanager](#compluralsightfilemanager)
+5. [Examples](#examples)
+  - [Start Screen](#start-screen)
+  - [Login Screen](#login-screen)
+  - [Home Screen](#home-screen)
+  - [Order Screen](#order-screen)
+  - [Checkout](#checkout)
+  - [Reward Screen](#reward-screen)
+  - [Receipt](#receipt)
 ## Overview
 This project is a Java based application that allows users to place orders, manage their account, track their order history
 and earn rewards points that they can redeem. The project includes features such as user authentication, storing user data,
@@ -97,3 +121,5 @@ The user can then choose to claim a reward. For 100 points they can claim a free
 ![Receipt](ReadMeImages/ReceiptExample.png)
 
 When the user confirms a purchase, their order is saved as a .txt file, with the file name being the time of purchase.
+
+[Back to Top](#deli-cious)
