@@ -1,4 +1,4 @@
-package com.pluralsight;
+package com.pluralsight.menu;
 
 public abstract class ExtraProduct implements Orderable {
     private final String name;

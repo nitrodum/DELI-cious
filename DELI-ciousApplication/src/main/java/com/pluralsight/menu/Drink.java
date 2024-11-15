@@ -1,4 +1,4 @@
-package com.pluralsight;
+package com.pluralsight.menu;
 
 public class Drink extends ExtraProduct {
     private String size;
@@ -8,6 +8,10 @@ public class Drink extends ExtraProduct {
         super(name, price);
         this.size = size;
         this.ice = ice;
+    }
+
+    public String getSize() {
+        return size;
     }
 
     @Override
