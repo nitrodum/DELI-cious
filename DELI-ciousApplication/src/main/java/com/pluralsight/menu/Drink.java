@@ -10,6 +10,10 @@ public class Drink extends ExtraProduct {
         this.ice = ice;
     }
 
+    public String getSize() {
+        return size;
+    }
+
     @Override
     public String toString() {
         return "Drink: \n" + getName() +

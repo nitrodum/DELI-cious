@@ -1,7 +1,0 @@
-Philly Cheesesteak Sandwich:
-Size: 8"
-Bread: White
-Toppings: [Steak, American, peppers, mayo]
-Toasted
-Price: $10.50
-Total: $10.50
